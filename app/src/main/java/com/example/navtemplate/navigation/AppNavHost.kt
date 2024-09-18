@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -36,10 +38,12 @@ fun AppNavHost(appViewModel: UserViewModel, padding: Modifier) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val isUserLogged by appViewModel.isUserLogged.collectAsState(initial = false)
+
     // Crear un solo NavHost para manejar todas las rutas
     NavHost(
         navController = navController,
-        startDestination = if (appViewModel.isUserLogged) "home" else "login"
+        startDestination = if (isUserLogged) "home" else "login"
     ) {
         composable("login") {
             LoginScreen(navController, appViewModel)

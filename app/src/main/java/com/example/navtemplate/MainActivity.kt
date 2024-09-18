@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NavTemplateTheme {
-                val userViewModel = UserViewModel(UserService.instance)
+                val userViewModel = UserViewModel(UserService.instance, application)
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppNavHost(userViewModel, Modifier.padding(innerPadding))
                 }
