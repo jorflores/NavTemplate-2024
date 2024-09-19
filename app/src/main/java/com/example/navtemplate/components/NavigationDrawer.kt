@@ -1,17 +1,26 @@
 package com.example.navtemplate.components
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.navtemplate.viewmodel.UserViewModel
 
 @Composable
 fun NavigationDrawer(navController: NavController, appViewModel: UserViewModel, onNavigate: (String) -> Unit) {
-    val isUserLogged = appViewModel.isUserLogged
+    val isUserLogged by appViewModel.isUserLogged.collectAsState(initial = false)
+
+    //val isUserLogged = appViewModel.isUserLogged
 // Obtener el estado del back stack del NavController
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
@@ -40,5 +49,16 @@ fun NavigationDrawer(navController: NavController, appViewModel: UserViewModel, 
             selected = currentDestination == "biblioteca",
             onClick = { onNavigate("biblioteca") }
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = { appViewModel.setUserLogged(false) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text("Log Out")
+        }
     }
 }

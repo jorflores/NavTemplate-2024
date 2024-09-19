@@ -1,8 +1,10 @@
 package com.example.navtemplate.viewmodel
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -10,18 +12,35 @@ import com.example.navtemplate.data.LoginUserRequest
 import com.example.navtemplate.data.LoginUserResponse
 import com.example.navtemplate.data.RegisterUserRequest
 import com.example.navtemplate.data.RegisterUserResponse
+import com.example.navtemplate.dataStore.PreferenceKeys.LOGGED_ID
+import com.example.navtemplate.dataStore.dataStore
+import com.example.navtemplate.dataStore.setLoggedIn
 import com.example.navtemplate.service.UserService
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class UserViewModel(private val userService: UserService) : ViewModel() {
+class UserViewModel(private val userService: UserService, application: Application) : AndroidViewModel(application) {
 
     var email by mutableStateOf("Jorge")
     var password by mutableStateOf("1234")
 
-    var isUserLogged by mutableStateOf(false)
+    //var isUserLogged by mutableStateOf(false)
+
+    val isUserLogged: Flow<Boolean> = getApplication<Application>().dataStore.data.map {
+        preferences ->
+        preferences[LOGGED_ID] == true
+    }
+
+    fun setUserLogged(value: Boolean){
+        viewModelScope.launch {
+            getApplication<Application>().setLoggedIn(value)
+
+        }
+    }
 
     private val _login = MutableStateFlow<LoginUserState>(LoginUserState.Initial)
     val login: StateFlow<LoginUserState> = _login
