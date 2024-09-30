@@ -11,8 +11,10 @@ import com.example.navtemplate.data.LoginUserResponse
 import com.example.navtemplate.data.RegisterUserRequest
 import com.example.navtemplate.data.RegisterUserResponse
 import com.example.navtemplate.dataStore.PreferenceKeys.LOGGED_ID
+import com.example.navtemplate.dataStore.PreferenceKeys.TOKEN
 import com.example.navtemplate.dataStore.dataStore
 import com.example.navtemplate.dataStore.setLoggedIn
+import com.example.navtemplate.dataStore.setToken
 import com.example.navtemplate.service.UserService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +35,21 @@ class UserViewModel(private val userService: UserService, application: Applicati
         preferences[LOGGED_ID] == true
     }
 
+    val token: Flow<String> = getApplication<Application>().dataStore.data.map {
+            preferences ->
+        preferences[TOKEN] ?: ""
+    }
+
     fun setUserLogged(value: Boolean){
         viewModelScope.launch {
             getApplication<Application>().setLoggedIn(value)
 
+        }
+    }
+
+    fun setToken(token: String){
+        viewModelScope.launch {
+            getApplication<Application>().setToken(token)
         }
     }
 
@@ -70,7 +83,7 @@ class UserViewModel(private val userService: UserService, application: Applicati
             try {
                 _login.value = LoginUserState.Loading
                 val response = userService.loginUser(user)
-                //isUserLogged = true
+              // setToken(response.token)
                 _login.value = LoginUserState.Success(response)
             } catch (e: Exception) {
                 _login.value = LoginUserState.Error("Error en el login: " + e.message.toString())

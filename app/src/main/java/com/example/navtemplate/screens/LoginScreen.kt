@@ -53,9 +53,10 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
             is LoginUserState.Success -> {
                 // Show the snackbar
                 snackbarHostState.showSnackbar("Login exitoso")
-                //navController.navigate("home")
-                //userViewModel.isUserLogged = true
+                // Almacenamos el token en el DataStore
+                userViewModel.setToken(login.loginResponse.token)
                 userViewModel.setUserLogged(true)
+
             }
 
             is LoginUserState.Error -> {
