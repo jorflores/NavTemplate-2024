@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,9 +16,16 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
+        // Lee el API_URL desde local.properties
+        val localProperties = Properties()
+        localProperties.load(rootProject.file("local.properties").inputStream())
+        val apiUrl = localProperties.getProperty("api_url")
+
+        // Asegúrate de que no esté vacío
+        if (apiUrl != null) {
+            buildConfigField("String", "API_URL", "\"$apiUrl\"")
+        } else {
+            throw GradleException("api_url no está definido en local.properties")
         }
     }
 
@@ -37,6 +46,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {

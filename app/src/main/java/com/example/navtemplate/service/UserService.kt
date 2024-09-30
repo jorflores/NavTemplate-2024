@@ -1,6 +1,7 @@
 package com.example.navtemplate.service
 
 
+import com.example.navtemplate.BuildConfig
 import com.example.navtemplate.data.LoginUserRequest
 import com.example.navtemplate.data.LoginUserResponse
 import com.example.navtemplate.data.RegisterUserRequest
@@ -12,7 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+
 interface UserService {
+
 
 
     companion object {
@@ -20,12 +23,16 @@ interface UserService {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
+
+
         private val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
 
+
         val instance: UserService = Retrofit.Builder()
-            .baseUrl("https://render-starter-postgredb.onrender.com/")
+            
+            .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
