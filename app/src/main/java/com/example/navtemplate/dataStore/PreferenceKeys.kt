@@ -7,4 +7,5 @@ object PreferenceKeys {
 
 
     val LOGGED_ID = booleanPreferencesKey("logged_in")
+    val TOKEN = stringPreferencesKey("token")
 }

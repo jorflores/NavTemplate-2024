@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -27,6 +28,7 @@ fun HomeScreen(navController: NavController, appViewModel: UserViewModel) {
     // Remember the state of the drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val tokenState = appViewModel.token.collectAsState(initial = "")
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -54,7 +56,7 @@ fun HomeScreen(navController: NavController, appViewModel: UserViewModel) {
             },
             content = { padding ->
                 // Main content of the screen
-                Text(text = "", Modifier.padding(padding))
+                Text(text = "Token: ${tokenState.value}", Modifier.padding(padding))
                 // Use `padding` if necessary for the content
             }
         )
