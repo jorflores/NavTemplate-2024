@@ -5,9 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.navtemplate.data.LoginUserRequest
 import com.example.navtemplate.data.LoginUserResponse
 import com.example.navtemplate.data.RegisterUserRequest
@@ -25,7 +23,7 @@ import java.lang.Exception
 
 class UserViewModel(private val userService: UserService, application: Application) : AndroidViewModel(application) {
 
-    var email by mutableStateOf("Jorge")
+    var email by mutableStateOf("jorge.flores@tec.mx")
     var password by mutableStateOf("1234")
 
     //var isUserLogged by mutableStateOf(false)
